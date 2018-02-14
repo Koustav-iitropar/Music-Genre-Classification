@@ -1,0 +1,18 @@
+function data = task1(filename)
+[y,Fs]=audioread(filename);
+window=100;
+window_length=floor(size(y,1)/window);
+mfccParams = feature_mfccs_init(window_length, Fs);
+data=zeros(0,0);
+for i=1:window-1
+    x= y( (i-1)*window+1: (i-1)*window + window_length,:);
+    ceps = feature_mfccs(fft(x), mfccParams );
+    ceps=abs(ceps)';
+    E=feature_energy(x);
+    windowfft=abs(fft(x));
+    [C,S] = feature_spectral_centroid(windowfft, Fs);
+    F = feature_spectral_flux(abs(fft), windowFFTPrev)
+%     [H,F] = feature_harmonic(x, Fs);
+    data=[data ceps E C S];
+    z=x;
+end
